@@ -3,7 +3,7 @@
 namespace CidadeEmOrdem.Extensions;
 
 /*
- * Nesta classe nos chamamos as rotas sem precisar deixar
+ * Nesta classe nós chamamos as rotas sem precisar deixar
  * o Program.cs cheio de extensões
 */
 public static class EndpointExtensions
