@@ -1,4 +1,5 @@
 ﻿using CidadeEmOrdem.Models;
+using CidadeEmOrdem.Services;
 
 namespace CidadeEmOrdem.Endpoints;
 
@@ -11,45 +12,57 @@ public static class OrdemEndpoint
 {
     public static WebApplication MapOrdemEndpoints(this WebApplication app)
     {
-        app.MapGet("/problemas", () =>
+        app.MapGet("/problemas", (IOrdemService service) =>
         {
-            var lista = new List<Ordem>
-            {
-                new Ordem
-                {
-                    Descricao = "Buraco na rua principal",
-                    TipoProblema = TipoProblema.Buraco,
-                    Prioridade = Prioridade.Alta,
-                    Endereco = new Endereco
-                    {
-                        Estado = "SP",
-                        Cidade = "Sjrp",
-                        Cep = "15560-098",
-                        Bairro = "Sao Joao",
-                        Logradouro = "Rua Sao Vicente de Paula 654"
-                    },
-                    ImagemUrl = "https://exemplo.com/buraco.jpg",
-                    FoiResolvido = false
-                },
-                new Ordem
-                {
-                    Descricao = "Arvore maluca atacando os pedestres",
-                    TipoProblema = TipoProblema.Arvore,
-                    Prioridade = Prioridade.Media,
-                    Endereco = new Endereco
-                    {
-                        Estado = "SP",
-                        Cidade = "Palestina",
-                        Cep = "15560-078",
-                        Bairro = "Tem bairro",
-                        Logradouro = "Aquela la daquele lugar 123"
-                    },
-                    ImagemUrl = "https://exemplo.com/arvore-do-mal.jpg",
-                    FoiResolvido = false
-                }
-            };
+            var lista = service.GetAll();
+            return Results.Ok(lista);
+        });
 
-            return lista;
+        app.MapGet("/problemas/{id}", (int id, IOrdemService service) =>
+        {
+            var ordem = service.GetById(id);
+            return ordem is not null
+                ? Results.Ok(ordem)
+                : Results.NotFound($"Ordem com id {id} não encontrada.");
+        });
+
+        app.MapPost("/problemas", (Ordem ordem, IOrdemService service) =>
+        {
+            try
+            {
+                var novaOrdem = service.CriarOrdem(ordem);
+                return Results.Created($"/problemas/{novaOrdem.Id}", novaOrdem);
+            }
+            catch (ArgumentException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        });
+
+        app.MapPut("/problemas/{id}", (int id, Ordem ordem, IOrdemService service) =>
+        {
+            try
+            {
+                var atualizada = service.AtualizarOrdem(id, ordem);
+                return Results.Ok(atualizada);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Results.NotFound(ex.Message);
+            }
+        });
+
+        app.MapDelete("/problemas/{id}", (int id, IOrdemService service) =>
+        {
+            try
+            {
+                service.RemoverOrdem(id);
+                return Results.NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Results.NotFound(ex.Message);
+            }
         });
 
         return app;
