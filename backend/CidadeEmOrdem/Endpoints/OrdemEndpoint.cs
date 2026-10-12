@@ -26,6 +26,54 @@ public static class OrdemEndpoint
                 : Results.NotFound($"Ordem com id {id} não encontrada.");
         });
 
+        app.MapGet("/problemas/tipo/{tipoProblema}", (TipoProblema tipoProblema, IOrdemService service) =>
+        {
+            var ordem = service.GetByTipoProblema(tipoProblema);
+            return ordem is not null
+                ? Results.Ok(ordem)
+                : Results.NotFound($"Ordem com o problema {tipoProblema} não encontrada.");
+        });
+
+        app.MapGet("/problemas/estado/{estado}", (string estado, IOrdemService service) =>
+        {
+            var ordem = service.GetByEstado(estado);
+            return ordem is not null
+                ? Results.Ok(ordem)
+                : Results.NotFound($"Ordem com o estado {estado} não encontrada.");
+        });
+
+        app.MapGet("/problemas/cidade/{cidade}", (string cidade, IOrdemService service) =>
+        {
+            var ordem = service.GetByCidade(cidade);
+            return ordem is not null
+                ? Results.Ok(ordem)
+                : Results.NotFound($"Ordem com a cidade {cidade} não encontrada.");
+        });
+
+        app.MapGet("/problemas/bairro/{bairro}", (string bairro, IOrdemService service) =>
+        {
+            var ordem = service.GetByBairro(bairro);
+            return ordem is not null
+                ? Results.Ok(ordem)
+                : Results.NotFound($"Ordem com o bairro {bairro} não encontrada.");
+        });
+
+        app.MapGet("/problemas/logradouro/{logradouro}", (string logradouro, IOrdemService service) =>
+        {
+            var ordem = service.GetByLogradouro(logradouro);
+            return ordem is not null
+                ? Results.Ok(ordem)
+                : Results.NotFound($"Ordem com o logradouro {logradouro} não encontrada.");
+        });
+
+        app.MapGet("/problemas/prioridade/{prioridade}", (Prioridade prioridade, IOrdemService service) =>
+        {
+            var ordem = service.GetByPrioridade(prioridade);
+            return ordem is not null
+                ? Results.Ok(ordem)
+                : Results.NotFound($"Ordem com a prioridade {prioridade} não encontrada.");
+        });
+
         app.MapPost("/problemas", (Ordem ordem, IOrdemService service) =>
         {
             try
@@ -64,6 +112,8 @@ public static class OrdemEndpoint
                 return Results.NotFound(ex.Message);
             }
         });
+
+
 
         return app;
     }
