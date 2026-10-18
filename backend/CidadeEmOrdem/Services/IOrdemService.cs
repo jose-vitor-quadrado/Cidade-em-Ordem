@@ -15,4 +15,6 @@ public interface IOrdemService
     Ordem? CriarOrdem(Ordem ordem);
     Ordem? AtualizarOrdem(int id, Ordem ordem);
     bool RemoverOrdem(int id);
+
+    Task<string?> SalvarImagemAsync(int id, IFormFile imagem, string webRootPath);
 }

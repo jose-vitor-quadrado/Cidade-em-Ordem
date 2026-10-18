@@ -20,6 +20,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
+
 app.MapEndpoints();
 
 app.Run();

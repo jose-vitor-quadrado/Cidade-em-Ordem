@@ -68,4 +68,35 @@ public class OrdemService : IOrdemService
         _repository.RemoverOrdemAsync(ordem);
         return true;
     }
+
+    public async Task<string?> SalvarImagemAsync(int id, IFormFile imagem, string webRootPath) 
+    {
+        if (imagem == null || imagem.Length == 0)
+            return null;
+
+        if (string.IsNullOrEmpty(webRootPath))
+        {
+            webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+        }
+
+        var ordem = _repository.GetById(id);
+        if (ordem == null)
+            return null;
+
+        var uploadsFolder = Path.Combine(webRootPath, "uploads");
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(imagem.FileName)}";
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        using (var steam = new FileStream(filePath, FileMode.Create))
+        {
+            await imagem.CopyToAsync(steam);
+        }
+
+        ordem.ImagemUrl = $"/uploads/{fileName}";
+        _repository.AtualizarOrdemAsync(ordem);
+        return ordem.ImagemUrl;
+    }
 }

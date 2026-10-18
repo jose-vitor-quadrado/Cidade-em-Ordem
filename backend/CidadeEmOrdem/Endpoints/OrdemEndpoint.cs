@@ -113,7 +113,23 @@ public static class OrdemEndpoint
             }
         });
 
-
+        app.MapPost("/problemas/{id}/upload-imagem", async (int id, IFormFile imagem, IOrdemService service, IWebHostEnvironment env) =>
+        {
+            try
+            {
+                var imagemUrl = await service.SalvarImagemAsync(id, imagem, env.WebRootPath);
+                return Results.Ok(new { ImagemUrl = imagemUrl });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return Results.NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+        })
+        .DisableAntiforgery();
 
         return app;
     }
