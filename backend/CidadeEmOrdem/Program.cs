@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Builder Extensions
 builder.AddData();
+builder.AddFrontend();
 
 var app = builder.Build();
 
@@ -21,6 +23,10 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+// Habilita o frontend
+app.UseCors("FrontendPolicy");
+
+// Endpoint Extensions
 app.MapEndpoints();
 
 app.Run();
