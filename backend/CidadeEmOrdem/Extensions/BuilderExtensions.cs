@@ -13,5 +13,6 @@ public static class BuilderExtensions
             options.UseSqlite("Data Source=cidadeemordem.db"));
         builder.Services.AddScoped<IOrdemRepository, OrdemRepository>();
         builder.Services.AddScoped<IOrdemService, OrdemService>();
+        builder.Services.AddOpenApi();
     }
 }
