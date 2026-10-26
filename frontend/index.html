@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Registre e consulte problemas urbanos na sua cidade.">
+  <title>Cidade em Ordem</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="cabecalho">
+  <a href="#inicio" class="logo"><span class="logo-icone">CO</span><span>Cidade em Ordem</span></a>
+  <nav class="menu"><a href="#inicio">Início</a><a href="#sobre">Sobre o projeto</a><a href="#como-funciona">Como funciona</a><a href="#consultar">Consultar</a></nav>
+  <a href="#registrar" class="botao botao-pequeno">Registrar problema</a>
+</header>
+<main>
+  <section class="hero" id="inicio">
+    <div class="hero-conteudo"><span class="etiqueta">SUA CIDADE, SUA VOZ</span><h1>Uma cidade melhor começa com <span>uma atitude.</span></h1><p>Encontrou um problema na sua cidade? Ajude a tornar os espaços urbanos melhores registrando ocorrências de forma simples e rápida.</p><div class="hero-botoes"><a href="#registrar" class="botao">Registrar um problema →</a><a href="#consultar" id="btnConsultarHero" class="botao botao-secundario">Consultar problemas</a></div><div class="hero-informacao"><span class="ponto-rosa"></span>Sua participação faz a diferença.</div></div>
+    <div class="hero-visual"><div class="cartao-ilustracao"><div class="circulo circulo-grande"></div><div class="circulo circulo-pequeno"></div><div class="predio predio-um"></div><div class="predio predio-dois"></div><div class="predio predio-tres"></div><div class="cartao-mensagem"><span class="mensagem-icone">✓</span><div><strong>Sua voz importa!</strong><p>Ajude a melhorar sua cidade.</p></div></div><div class="flor-decorativa">✿</div></div></div>
+  </section>
+  <section class="sobre" id="sobre"><div class="titulo-secao"><span class="etiqueta">SOBRE O PROJETO</span><h2>Pequenas atitudes, <span>grandes mudanças.</span></h2><p>O Cidade em Ordem busca facilitar o registro e o acompanhamento de problemas urbanos, incentivando a participação dos cidadãos na melhoria da cidade.</p></div><div class="cartoes"><article class="cartao"><div class="cartao-icone">✎</div><h3>Registre</h3><p>Registre ocorrências com descrição, categoria e localização.</p></article><article class="cartao"><div class="cartao-icone">⌕</div><h3>Consulte</h3><p>Pesquise ocorrências usando filtros por status, prioridade e localização.</p></article><article class="cartao"><div class="cartao-icone">♡</div><h3>Contribua</h3><p>Ajude a construir uma cidade mais organizada e agradável para todos.</p></article></div></section>
+  <section class="chamada" id="como-funciona"><div><span class="etiqueta">FAÇA PARTE DA MUDANÇA</span><h2>Viu um problema?<br>Ajude a dar visibilidade a ele.</h2><p>Leva apenas alguns instantes para registrar uma ocorrência.</p></div><a href="#registrar" class="botao botao-claro">Quero registrar →</a></section>
+  <section class="area-acoes" id="registrar"><h2>Como podemos ajudar?</h2><p>Registre uma ocorrência ou consulte os problemas já cadastrados.</p><div class="acoes-botoes"><button class="botao" id="btnRegistrar" type="button">Registrar problema</button><button class="botao botao-secundario" id="btnConsultar" type="button">Consultar problemas</button></div><div id="areaConteudo" class="area-conteudo" hidden></div></section>
+</main>
+<footer class="rodape"><a href="#inicio" class="logo"><span class="logo-icone">CO</span><span>Cidade em Ordem</span></a><p>Cuidar da cidade é uma responsabilidade de todos.</p><span>© 2026 Cidade em Ordem</span></footer>
+
+  <div class="imagem-ampliada-overlay" id="visualizadorImagemPublico" role="dialog" aria-modal="true" aria-label="Imagem da ocorrência ampliada" aria-hidden="true">
+    <button type="button" class="imagem-ampliada-fechar" id="fecharImagemAmpliadaPublico" aria-label="Fechar imagem">&times;</button>
+    <img id="imagemAmpliadaPublico" src="" alt="">
+    <p class="imagem-ampliada-legenda" id="legendaImagemAmpliadaPublico"></p>
+  </div>
+
+<script src="script.js"></script>
+</body></html>
