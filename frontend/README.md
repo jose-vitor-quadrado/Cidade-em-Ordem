@@ -32,7 +32,7 @@ Entre no diretório que contém os arquivos HTML, CSS e JavaScript da interface.
 Execute:
 
 ```bash
-npx live-server --port=5500
+npx live-server --host=localhost --port=5500
 ```
 
 Caso o `live-server` não esteja disponível, o `npx` poderá solicitar a instalação ou execução do pacote.
