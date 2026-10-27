@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const BASE_URL = 'http://localhost:5021';
+  const BASE_URL = 'https://localhost:7119';
   const API_URL = `${BASE_URL}/problemas`;
   const CATEGORIAS = {0:'Semáforo',1:'Buraco',2:'Iluminação pública',3:'Árvore',4:'Lixo',5:'Outro'};
   const PRIORIDADES = {0:'Crítica',1:'Alta',2:'Média',3:'Baixa'};

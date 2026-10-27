@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // URL base do backend
-    const BASE_URL = 'http://localhost:5021';
+    const BASE_URL = 'https://localhost:7119';
     const API_URL = `${BASE_URL}/problemas`;
 
     // Mapeamento de enums para texto
