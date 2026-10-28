@@ -14,13 +14,13 @@ public static class OrdemEndpoint
     {
         app.MapGet("/problemas", (IOrdemService service) =>
         {
-            var lista = service.GetAll();
+            var lista = service.GetAllAsync();
             return Results.Ok(lista);
         });
 
         app.MapGet("/problemas/{id}", (int id, IOrdemService service) =>
         {
-            var ordem = service.GetById(id);
+            var ordem = service.GetByIdAsync(id);
             return ordem is not null
                 ? Results.Ok(ordem)
                 : Results.NotFound($"Ordem com id {id} não encontrada.");
@@ -78,7 +78,7 @@ public static class OrdemEndpoint
         {
             try
             {
-                var novaOrdem = service.CriarOrdem(ordem);
+                var novaOrdem = service.CriarOrdemAsync(ordem);
                 return Results.Created($"/problemas/{novaOrdem.Id}", novaOrdem);
             }
             catch (ArgumentException ex)
@@ -91,7 +91,7 @@ public static class OrdemEndpoint
         {
             try
             {
-                var atualizada = service.AtualizarOrdem(id, ordem);
+                var atualizada = service.AtualizarOrdemAsync(id, ordem);
                 return Results.Ok(atualizada);
             }
             catch (KeyNotFoundException ex)
@@ -104,7 +104,7 @@ public static class OrdemEndpoint
         {
             try
             {
-                service.RemoverOrdem(id);
+                service.RemoverOrdemAsync(id);
                 return Results.NoContent();
             }
             catch (KeyNotFoundException ex)
