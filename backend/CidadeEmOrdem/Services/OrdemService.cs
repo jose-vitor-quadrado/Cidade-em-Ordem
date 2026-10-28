@@ -75,25 +75,35 @@ public class OrdemService : IOrdemService
         return true;
     }
 
-    public async Task<string?> SalvarImagemAsync(int id, IFormFile imagem, string webRootPath) 
+    public async Task<string?> SalvarImagemAsync(
+        int id, 
+        IFormFile imagem, 
+        string webRootPath) 
     {
         if (imagem == null || imagem.Length == 0)
             return null;
 
-        if (string.IsNullOrEmpty(webRootPath))
-        {
-            webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-        }
-
         var ordem = await _repository.GetByIdAsync(id);
+
         if (ordem == null)
             return null;
 
-        var uploadsFolder = Path.Combine(webRootPath, "uploads");
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
+        if (string.IsNullOrEmpty(webRootPath))
+        {
+            webRootPath = Path.Combine(
+                Directory.GetCurrentDirectory(), 
+                "wwwroot");
+        }
 
-        var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(imagem.FileName)}";
+        var uploadsFolder = Path.Combine(
+            webRootPath, 
+            "uploads");
+
+        Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = 
+            $"{Guid.NewGuid()}{Path.GetExtension(imagem.FileName)}";
+
         var filePath = Path.Combine(uploadsFolder, fileName);
 
         using (var steam = new FileStream(filePath, FileMode.Create))
@@ -102,7 +112,9 @@ public class OrdemService : IOrdemService
         }
 
         ordem.ImagemUrl = $"/uploads/{fileName}";
+
         await _repository.AtualizarOrdemAsync(ordem);
+
         return ordem.ImagemUrl;
     }
 }
