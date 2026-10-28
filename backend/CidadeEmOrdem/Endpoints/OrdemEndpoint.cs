@@ -12,15 +12,15 @@ public static class OrdemEndpoint
 {
     public static WebApplication MapOrdemEndpoints(this WebApplication app)
     {
-        app.MapGet("/problemas", (IOrdemService service) =>
+        app.MapGet("/problemas", async (IOrdemService service) =>
         {
-            var lista = service.GetAllAsync();
+            var lista = await service.GetAllAsync();
             return Results.Ok(lista);
         });
 
-        app.MapGet("/problemas/{id}", (int id, IOrdemService service) =>
+        app.MapGet("/problemas/{id}", async (int id, IOrdemService service) =>
         {
-            var ordem = service.GetByIdAsync(id);
+            var ordem = await service.GetByIdAsync(id);
             return ordem is not null
                 ? Results.Ok(ordem)
                 : Results.NotFound($"Ordem com id {id} não encontrada.");
@@ -28,57 +28,57 @@ public static class OrdemEndpoint
 
         app.MapGet("/problemas/tipo/{tipoProblema}", (TipoProblema tipoProblema, IOrdemService service) =>
         {
-            var ordem = service.GetByTipoProblema(tipoProblema);
-            return ordem is not null
-                ? Results.Ok(ordem)
+            var ordens = service.GetByTipoProblema(tipoProblema);
+            return ordens.Any()
+                ? Results.Ok(ordens)
                 : Results.NotFound($"Ordem com o problema {tipoProblema} não encontrada.");
         });
 
         app.MapGet("/problemas/estado/{estado}", (string estado, IOrdemService service) =>
         {
-            var ordem = service.GetByEstado(estado);
-            return ordem is not null
-                ? Results.Ok(ordem)
+            var ordens = service.GetByEstado(estado);
+            return ordens.Any()
+                ? Results.Ok(ordens)
                 : Results.NotFound($"Ordem com o estado {estado} não encontrada.");
         });
 
         app.MapGet("/problemas/cidade/{cidade}", (string cidade, IOrdemService service) =>
         {
-            var ordem = service.GetByCidade(cidade);
-            return ordem is not null
-                ? Results.Ok(ordem)
+            var ordens = service.GetByCidade(cidade);
+            return ordens.Any()
+                ? Results.Ok(ordens)
                 : Results.NotFound($"Ordem com a cidade {cidade} não encontrada.");
         });
 
         app.MapGet("/problemas/bairro/{bairro}", (string bairro, IOrdemService service) =>
         {
-            var ordem = service.GetByBairro(bairro);
-            return ordem is not null
-                ? Results.Ok(ordem)
+            var ordens = service.GetByBairro(bairro);
+            return ordens.Any()
+                ? Results.Ok(ordens)
                 : Results.NotFound($"Ordem com o bairro {bairro} não encontrada.");
         });
 
         app.MapGet("/problemas/logradouro/{logradouro}", (string logradouro, IOrdemService service) =>
         {
-            var ordem = service.GetByLogradouro(logradouro);
-            return ordem is not null
-                ? Results.Ok(ordem)
+            var ordens = service.GetByLogradouro(logradouro);
+            return ordens.Any()
+                ? Results.Ok(ordens)
                 : Results.NotFound($"Ordem com o logradouro {logradouro} não encontrada.");
         });
 
         app.MapGet("/problemas/prioridade/{prioridade}", (Prioridade prioridade, IOrdemService service) =>
         {
-            var ordem = service.GetByPrioridade(prioridade);
-            return ordem is not null
-                ? Results.Ok(ordem)
+            var ordens = service.GetByPrioridade(prioridade);
+            return ordens.Any()
+                ? Results.Ok(ordens)
                 : Results.NotFound($"Ordem com a prioridade {prioridade} não encontrada.");
         });
 
-        app.MapPost("/problemas", (Ordem ordem, IOrdemService service) =>
+        app.MapPost("/problemas", async (Ordem ordens, IOrdemService service) =>
         {
             try
             {
-                var novaOrdem = service.CriarOrdemAsync(ordem);
+                var novaOrdem = await service.CriarOrdemAsync(ordens);
                 return Results.Created($"/problemas/{novaOrdem.Id}", novaOrdem);
             }
             catch (ArgumentException ex)
@@ -87,11 +87,11 @@ public static class OrdemEndpoint
             }
         });
 
-        app.MapPut("/problemas/{id}", (int id, Ordem ordem, IOrdemService service) =>
+        app.MapPut("/problemas/{id}", async (int id, Ordem ordens, IOrdemService service) =>
         {
             try
             {
-                var atualizada = service.AtualizarOrdemAsync(id, ordem);
+                var atualizada = await service.AtualizarOrdemAsync(id, ordens);
                 return Results.Ok(atualizada);
             }
             catch (KeyNotFoundException ex)
@@ -100,11 +100,11 @@ public static class OrdemEndpoint
             }
         });
 
-        app.MapDelete("/problemas/{id}", (int id, IOrdemService service) =>
+        app.MapDelete("/problemas/{id}", async (int id, IOrdemService service) =>
         {
             try
             {
-                service.RemoverOrdemAsync(id);
+                await service.RemoverOrdemAsync(id);
                 return Results.NoContent();
             }
             catch (KeyNotFoundException ex)
