@@ -1,0 +1,36 @@
+@let p = problema();
+<article class="cartao-problema-publico" [class]="classePrioridade()">
+  <div class="cartao-cabecalho-publico">
+    <span class="etiqueta-problema">{{ categoria() }}</span>
+    <span class="status-badge" [class.status-resolvido]="p.foiResolvido" [class.status-pendente]="!p.foiResolvido">
+      Status: {{ p.foiResolvido ? 'Resolvido' : 'Pendente' }}
+    </span>
+    <span class="prioridade-texto" [class]="classePrioridade()">Prioridade: {{ prioridade() }}</span>
+  </div>
+
+  <h4>Ocorrência #{{ p.id ?? '—' }}</h4>
+  <p class="descricao-card">{{ p.descricao || 'Sem descrição cadastrada.' }}</p>
+
+  <div class="detalhes-card">
+    <span><strong>Logradouro:</strong> {{ p.endereco.logradouro || 'Não informado' }}</span>
+    <span><strong>Bairro:</strong> {{ p.endereco.bairro || 'Não informado' }}</span>
+    <span><strong>Cidade/UF:</strong> {{ p.endereco.cidade || 'Não informada' }}/{{ p.endereco.estado || 'UF' }}</span>
+    <span><strong>CEP:</strong> {{ p.endereco.cep || 'Não informado' }}</span>
+  </div>
+
+  @if (p.imagemSrc && !imagemQuebrada()) {
+    <img
+      class="imagem-card-publico imagem-ampliavel"
+      [src]="p.imagemSrc"
+      [alt]="'Imagem da ocorrência #' + p.id"
+      loading="lazy"
+      tabindex="0"
+      role="button"
+      title="Clique para ampliar"
+      (click)="ampliar()"
+      (keydown.enter)="ampliar(); $event.preventDefault()"
+      (keydown.space)="ampliar(); $event.preventDefault()"
+      (error)="imagemQuebrada.set(true)"
+    />
+  }
+</article>

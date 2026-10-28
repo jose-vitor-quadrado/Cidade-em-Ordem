@@ -1,0 +1,109 @@
+<form class="formulario-problema" [formRoot]="formulario">
+  <h3>Registrar um problema</h3>
+  <p class="form-intro">
+    Preencha as informações abaixo. O CEP pode completar automaticamente rua, bairro, cidade e estado.
+  </p>
+
+  <div class="form-grid-publico">
+    <div class="form-group-publico full">
+      <label for="cadDescricao">Descrição do problema *</label>
+      <textarea
+        id="cadDescricao"
+        [formField]="formulario.descricao"
+        placeholder="Descreva o que aconteceu e como isso afeta a região..."
+      ></textarea>
+      @if (erro(formulario.descricao); as e) { <span class="erro-campo">{{ e }}</span> }
+    </div>
+
+    <div class="form-group-publico">
+      <label for="cadCategoria">Categoria *</label>
+      <select id="cadCategoria" [formField]="formulario.categoria">
+        <option value="">Selecione a categoria</option>
+        @for (o of categorias; track o.valor) {
+          <option [value]="o.valor">{{ o.rotulo }}</option>
+        }
+      </select>
+      @if (erro(formulario.categoria); as e) { <span class="erro-campo">{{ e }}</span> }
+    </div>
+
+    <div class="form-group-publico">
+      <label for="cadPrioridade">Prioridade percebida *</label>
+      <select id="cadPrioridade" [formField]="formulario.prioridade">
+        @for (o of prioridades; track o.valor) {
+          <option [value]="o.valor">{{ o.rotulo }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group-publico">
+      <label for="cadCep">CEP *</label>
+      <input
+        id="cadCep"
+        type="text"
+        inputmode="numeric"
+        autocomplete="postal-code"
+        maxlength="9"
+        placeholder="00000-000"
+        [value]="formulario.cep().value()"
+        (input)="aoDigitarCep($event)"
+        (blur)="formulario.cep().markAsTouched()"
+      />
+      <span class="cep-status" [class]="cepStatus().classe" aria-live="polite">{{ cepStatus().texto }}</span>
+      @if (erro(formulario.cep); as e) { <span class="erro-campo">{{ e }}</span> }
+    </div>
+
+    <div class="form-group-publico">
+      <label for="cadRua">Rua / logradouro *</label>
+      <input id="cadRua" autocomplete="address-line1" placeholder="Nome da rua" [formField]="formulario.rua" />
+      @if (erro(formulario.rua); as e) { <span class="erro-campo">{{ e }}</span> }
+    </div>
+
+    <div class="form-group-publico">
+      <label for="cadBairro">Bairro *</label>
+      <input id="cadBairro" autocomplete="address-level3" placeholder="Bairro" [formField]="formulario.bairro" />
+      @if (erro(formulario.bairro); as e) { <span class="erro-campo">{{ e }}</span> }
+    </div>
+
+    <div class="form-group-publico">
+      <label for="cadCidade">Cidade *</label>
+      <input id="cadCidade" autocomplete="address-level2" placeholder="Cidade" [formField]="formulario.cidade" />
+      @if (erro(formulario.cidade); as e) { <span class="erro-campo">{{ e }}</span> }
+    </div>
+
+    <div class="form-group-publico">
+      <label for="cadEstado">Estado (UF) *</label>
+      <input
+        id="cadEstado"
+        maxlength="2"
+        autocomplete="address-level1"
+        placeholder="SP"
+        [value]="formulario.estado().value()"
+        (input)="aoDigitarUf($event)"
+        (blur)="formulario.estado().markAsTouched()"
+      />
+      @if (erro(formulario.estado); as e) { <span class="erro-campo">{{ e }}</span> }
+    </div>
+
+    <div class="form-group-publico full">
+      <label for="cadImagem">Foto do problema (opcional)</label>
+      <input #campoImagem id="cadImagem" type="file" accept="image/*" (change)="aoEscolherImagem($event)" />
+      <small class="ajuda-arquivo">
+        Anexe uma foto em JPG, PNG, WEBP ou outro formato de imagem. Tamanho máximo: 5 MB.
+      </small>
+      @if (previewUrl(); as url) {
+        <div class="preview-imagem-container">
+          <img [src]="url" alt="Pré-visualização da foto selecionada" />
+          <button type="button" class="botao botao-secundario" (click)="removerImagem(campoImagem)">
+            Remover foto
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="form-rodape">
+    <button class="botao" type="submit" [disabled]="formulario().submitting()">{{ textoBotao() }}</button>
+    <button class="botao botao-secundario" type="button" (click)="cancelar.emit()">Cancelar</button>
+    <span class="form-mensagem" [class]="aviso().classe" role="status" aria-live="polite">{{ aviso().texto }}</span>
+  </div>
+</form>

@@ -1,0 +1,54 @@
+@let p = problema();
+<article class="cartao-problema" [class]="classePrioridade()">
+  <div class="cartao-conteudo-admin">
+    <div class="cartao-cabecalho-admin">
+      <span class="etiqueta-problema">{{ categoria() }}</span>
+      <span class="status-badge" [class.status-resolvido]="p.foiResolvido" [class.status-pendente]="!p.foiResolvido">
+        Status: {{ p.foiResolvido ? 'Resolvido' : 'Pendente' }}
+      </span>
+      <span class="prioridade-texto" [class]="classePrioridade()">Prioridade: {{ prioridade() }}</span>
+    </div>
+
+    <h4>Solicitação #{{ p.id ?? 'N/A' }}</h4>
+    <p class="descricao-admin"><strong>Descrição:</strong> {{ p.descricao || 'Sem descrição cadastrada.' }}</p>
+
+    <div class="cartao-detalhes-admin">
+      <span><strong>Logradouro:</strong> {{ p.endereco.logradouro || 'Não informado' }}</span>
+      <span><strong>Bairro:</strong> {{ p.endereco.bairro || 'Não informado' }}</span>
+      <span><strong>Cidade/UF:</strong> {{ p.endereco.cidade || 'Não informada' }}/{{ p.endereco.estado || 'UF' }}</span>
+      <span><strong>CEP:</strong> {{ p.endereco.cep || 'Não informado' }}</span>
+    </div>
+  </div>
+
+  <div class="cartao-midia-acoes">
+    <div class="imagem-container-admin">
+      @if (p.imagemSrc && !imagemQuebrada()) {
+        <img
+          [src]="p.imagemSrc"
+          alt="Foto da ocorrência"
+          loading="lazy"
+          tabindex="0"
+          role="button"
+          title="Clique para ampliar"
+          (click)="ampliar()"
+          (keydown.enter)="ampliar(); $event.preventDefault()"
+          (keydown.space)="ampliar(); $event.preventDefault()"
+          (error)="imagemQuebrada.set(true)"
+        />
+      } @else {
+        <div class="consulta-vazia" style="height: 100%; display: grid; place-items: center; padding: 10px; font-size: 13px">
+          Sem Imagem Anexada
+        </div>
+      }
+    </div>
+
+    <div class="acoes-solicitacao-admin">
+      <button type="button" class="botao botao-secundario botao-pequeno" (click)="editar.emit(p)">
+        Editar Solicitação
+      </button>
+      <button type="button" class="botao botao-perigo botao-pequeno" (click)="excluir.emit(p)">
+        Excluir Solicitação
+      </button>
+    </div>
+  </div>
+</article>
