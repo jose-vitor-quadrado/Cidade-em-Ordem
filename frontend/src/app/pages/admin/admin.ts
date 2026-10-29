@@ -50,6 +50,7 @@ export class Admin {
   // ----- Edição (modal) -----
   protected readonly editando = signal<Problema | null>(null);
   private readonly modeloEdicao = signal<ModeloEdicao>({ ...MODELO_VAZIO });
+  protected readonly novaImagem = signal<File | null>(null);
 
   protected readonly formEdicao = form(
     this.modeloEdicao,
@@ -86,8 +87,20 @@ export class Admin {
     this.editando.set(p);
   }
 
+  protected aoEscolherImagem(evento: Event): void {
+    const input = evento.target as HTMLInputElement;
+    const arquivo = input.files?.[0] ?? null;
+    if (arquivo && (!arquivo.type.startsWith('image/') || arquivo.size > 5 * 1024 * 1024)) {
+      input.value = '';
+      alert('Escolha uma imagem de até 5 MB.');
+      return;
+    }
+    this.novaImagem.set(arquivo);
+  }
+
   protected fecharModal(): void {
     this.editando.set(null);
+    this.novaImagem.set(null);
   }
 
   private async salvar(): Promise<void> {
@@ -95,20 +108,23 @@ export class Admin {
     if (!original) return;
     const m = this.modeloEdicao();
     try {
-      await this.store.atualizar({
-        ...original,
-        descricao: m.descricao,
-        tipoProblema: Number(m.tipo),
-        prioridade: Number(m.prioridade),
-        foiResolvido: m.resolvido === 'true',
-        endereco: {
-          estado: m.estado.toUpperCase(),
-          cidade: m.cidade,
-          bairro: m.bairro,
-          logradouro: m.rua,
-          cep: m.cep,
+      await this.store.atualizar(
+        {
+          ...original,
+          descricao: m.descricao,
+          tipoProblema: Number(m.tipo),
+          prioridade: Number(m.prioridade),
+          foiResolvido: m.resolvido === 'true',
+          endereco: {
+            estado: m.estado.toUpperCase(),
+            cidade: m.cidade,
+            bairro: m.bairro,
+            logradouro: m.rua,
+            cep: m.cep,
+          },
         },
-      });
+        this.novaImagem(),
+      );
       this.fecharModal();
     } catch (erro) {
       console.error('Erro ao atualizar registro:', erro);

@@ -29,8 +29,9 @@ export class ProblemasStore {
     this.lista.reload();
   }
 
-  async atualizar(problema: Problema): Promise<void> {
+  async atualizar(problema: Problema, imagem?: File | null): Promise<void> {
     await this.api.atualizar(problema);
+    if (imagem) await this.api.enviarImagem(problema.id, imagem);
     this.recarregar();
   }
 
