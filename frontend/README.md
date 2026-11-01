@@ -1,20 +1,28 @@
 # Cidade em Ordem — Frontend
 
-Interface Web do **Cidade em Ordem**, desenvolvida com HTML, CSS e JavaScript puro, sem frameworks de interface. Permite que os cidadãos registrem e consultem problemas urbanos por meio da API do projeto.
+Frontend do **Cidade em Ordem**, desenvolvido com Angular 22, responsável pela interface de registro e consulta de problemas urbanos.
+
+O projeto busca facilitar a participação dos cidadãos na identificação de problemas urbanos, permitindo registrar ocorrências e consultar informações disponibilizadas pela API do sistema.
 
 ## 🧰 Tecnologias
 
-- **HTML5** — estrutura das páginas.
+- **Angular 22** — framework utilizado para desenvolver a interface.
+- **TypeScript** — linguagem utilizada no desenvolvimento da aplicação Angular.
+- **HTML5** — estruturação do conteúdo.
 - **CSS3** — estilização e layout da interface.
-- **JavaScript** — interatividade e comunicação com a API.
-- **Live Server** — servidor local para executar a aplicação durante o desenvolvimento.
+- **Node.js e npm** — ambiente e gerenciamento de dependências.
+- **Angular CLI** — ferramenta para executar, compilar e gerenciar o projeto.
 
 ## 📋 Pré-requisitos
 
-- [Node.js](https://nodejs.org/), que inclui o npm.
-- Backend do Cidade em Ordem configurado e em execução para utilizar as funcionalidades que dependem da API.
+Antes de executar a aplicação, instale:
 
-Verifique se o Node.js e o npm estão instalados:
+- [Node.js](https://nodejs.org/) compatível com o Angular 22.
+- npm, incluído na instalação do Node.js.
+
+Consulte a [tabela oficial de compatibilidade do Angular](https://angular.dev/reference/versions) para verificar as versões necessárias.
+
+Verifique as instalações pelo terminal:
 
 ```bash
 node -v
@@ -23,47 +31,64 @@ npm -v
 
 ## 🚀 Como executar
 
-**1. Abra o terminal na pasta do frontend.**
+### 1. Acesse o diretório do frontend
 
-Entre no diretório que contém os arquivos HTML, CSS e JavaScript da interface.
+No terminal, entre na pasta que contém o arquivo `package.json` do projeto Angular.
 
-**2. Inicie o servidor local.**
-
-Execute:
+### 2. Instale as dependências
 
 ```bash
-npx live-server --host=localhost --port=5500
+npm install
 ```
 
-Caso o `live-server` não esteja disponível, o `npx` poderá solicitar a instalação ou execução do pacote.
+Esse comando instala as dependências declaradas no projeto.
 
-**3. Acesse a aplicação.**
+### 3. Inicie a aplicação
 
-Abra o endereço abaixo no navegador:
+```bash
+npx ng serve
+```
 
-http://localhost:5500
+O Angular CLI compila a aplicação e inicia o servidor de desenvolvimento.
+
+Por padrão, a aplicação estará disponível em:
+
+http://localhost:4200
+
+Para abrir o navegador automaticamente, utilize:
+
+```bash
+npx ng serve --open
+```
+
+Para interromper o servidor, pressione `Ctrl + C` no terminal.
 
 ## ✨ Funcionalidades
 
-- Registro de problemas urbanos com descrição, categoria, prioridade e endereço.
-- Preenchimento dos dados do endereço a partir do CEP, quando disponível.
-- Anexo opcional de fotografia da ocorrência.
-- Consulta e busca de problemas cadastrados.
-- Interface para utilização das funcionalidades administrativas disponibilizadas pelo sistema.
+A interface tem como objetivo disponibilizar as seguintes funcionalidades:
+
+- **Registro de problemas urbanos:** formulário para informar a descrição, categoria, prioridade e endereço da ocorrência.
+- **Consulta de problemas:** visualização dos registros cadastrados.
+- **Busca por campos:** pesquisa de ocorrências utilizando os critérios disponibilizados pela API.
+- **Envio de imagens:** possibilidade de anexar uma fotografia ao problema, conforme a implementação do sistema.
+- **Administração de ocorrências:** interface para atualizar ou excluir registros, conforme as permissões e funcionalidades implementadas.
 
 ## 🔌 Integração com o backend
 
-O frontend utiliza requisições HTTP para se comunicar com a API do Cidade em Ordem.
+O frontend se comunica com a API Web do Cidade em Ordem para enviar e consultar informações.
 
-Para utilizar todas as funcionalidades, verifique se:
+Para utilizar as funcionalidades integradas:
 
-- O backend está em execução.
-- A URL configurada no JavaScript corresponde ao endereço da API.
-- A API permite as requisições de origem do frontend, conforme a configuração de CORS.
+1. Inicie o backend seguindo as instruções do [README do backend](../backend/README.md).
+2. Verifique o endereço e a porta em que a API está sendo executada.
+3. Confira se a URL utilizada nas requisições do frontend corresponde ao endereço configurado no backend.
+4. Verifique a configuração de CORS da API caso o navegador bloqueie as requisições entre origens diferentes.
 
-## 🔗 Projeto relacionado
+## 🏗️ Desenvolvimento
 
-Consulte o [README do backend](../backend/README.md) para conhecer as rotas da API, o exemplo de cadastro e as instruções para executar o servidor.
+O projeto utiliza Angular para organizar a interface em componentes e facilitar a manutenção do código. A comunicação com a API é realizada por requisições HTTP.
+
+Para consultar os detalhes da API, seus endpoints e os procedimentos de execução, acesse o README do backend.
 
 ---
 

@@ -1,0 +1,61 @@
+<section class="consulta-painel">
+  <h3>Consultar problemas</h3>
+  <p class="form-intro">Pesquise por descrição ou localização e combine os filtros.</p>
+
+  <div class="filtros-publicos">
+    <input
+      type="text"
+      placeholder="Pesquisar descrição, rua, bairro..."
+      aria-label="Pesquisar ocorrências"
+      [formField]="filtros.termo"
+    />
+    <select aria-label="Filtrar por status" [formField]="filtros.status">
+      <option value="todos">Todos os status</option>
+      <option value="pendente">Pendentes</option>
+      <option value="resolvido">Resolvidos</option>
+    </select>
+    <select aria-label="Filtrar por prioridade" [formField]="filtros.prioridade">
+      <option value="todas">Todas as prioridades</option>
+      @for (o of prioridades; track o.valor) {
+        <option [value]="o.valor">{{ o.rotulo }}</option>
+      }
+    </select>
+    <select aria-label="Filtrar por cidade" [formField]="filtros.cidade">
+      <option value="todas">Todas as cidades</option>
+      @for (c of cidades(); track c.chave) {
+        <option [value]="c.chave">{{ c.rotulo }}</option>
+      }
+    </select>
+    <select aria-label="Filtrar por estado" [formField]="filtros.estado">
+      <option value="todos">Todos os estados</option>
+      @for (e of estados(); track e.chave) {
+        <option [value]="e.chave">{{ e.rotulo }}</option>
+      }
+    </select>
+    <button type="button" class="botao botao-secundario" (click)="store.recarregar()">Atualizar resultados</button>
+  </div>
+
+  @if (!store.carregando() && !store.erro()) {
+    <div class="form-intro" aria-live="polite">{{ filtrados().length }} ocorrência(s) encontrada(s).</div>
+  }
+
+  <div class="cards-publicos">
+    @if (store.carregando()) {
+      <div class="consulta-vazia"><h4>Carregando ocorrências...</h4></div>
+    } @else if (store.erro()) {
+      <div class="consulta-vazia">
+        <h4>Não foi possível carregar os problemas</h4>
+        <p>Verifique se a API está em <strong>{{ store.apiUrl }}</strong>.</p>
+      </div>
+    } @else {
+      @for (p of filtrados(); track p.id) {
+        <app-cartao-problema-publico [problema]="p" />
+      } @empty {
+        <div class="consulta-vazia">
+          <h4>Nenhuma ocorrência encontrada</h4>
+          <p>Tente alterar a pesquisa ou os filtros.</p>
+        </div>
+      }
+    }
+  </div>
+</section>

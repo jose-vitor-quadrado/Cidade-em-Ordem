@@ -12,9 +12,15 @@ public class OrdemService : IOrdemService
         _repository = repository;
     }
 
-    public List<Ordem> GetAll() => _repository.GetAll();
+    public async Task<List<Ordem>> GetAllAsync() 
+    {
+        return await _repository.GetAllAsync();
+    }
 
-    public Ordem? GetById(int id) => _repository.GetById(id);
+    public async Task<Ordem?> GetByIdAsync(int id) 
+    {
+        return await _repository.GetByIdAsync(id);
+    }
 
     public List<Ordem> GetByTipoProblema(TipoProblema tipoProblema)
         => _repository.GetByTipoProblema(tipoProblema);
@@ -34,15 +40,15 @@ public class OrdemService : IOrdemService
     public List<Ordem> GetByLogradouro(string logradouro)
         => _repository.GetByLogradouro(logradouro);
 
-    public Ordem? CriarOrdem(Ordem ordem)
+    public async Task<Ordem> CriarOrdemAsync(Ordem ordem)
     {
-        _repository.CriarOrdemAsync(ordem);
+        await _repository.CriarOrdemAsync(ordem);
         return ordem;
     }
 
-    public Ordem? AtualizarOrdem(int id, Ordem ordem)
+    public async Task<Ordem?> AtualizarOrdemAsync(int id, Ordem ordem)
     {
-        var ordemExistente = _repository.GetById(id);
+        var ordemExistente = await _repository.GetByIdAsync(id);
         if (ordemExistente == null) return null;
 
         ordemExistente.Descricao = ordem.Descricao;
@@ -56,38 +62,48 @@ public class OrdemService : IOrdemService
         ordemExistente.ImagemUrl = ordem.ImagemUrl;
         ordemExistente.FoiResolvido = ordem.FoiResolvido;
 
-        _repository.AtualizarOrdemAsync(ordemExistente);
+        await _repository.AtualizarOrdemAsync(ordemExistente);
         return ordemExistente;
     }
 
-    public bool RemoverOrdem(int id)
+    public async Task<bool> RemoverOrdemAsync(int id)
     {
-        var ordem = _repository.GetById(id);
+        var ordem = await _repository.GetByIdAsync(id);
         if (ordem == null) return false;
 
-        _repository.RemoverOrdemAsync(ordem);
+        await _repository.RemoverOrdemAsync(ordem);
         return true;
     }
 
-    public async Task<string?> SalvarImagemAsync(int id, IFormFile imagem, string webRootPath) 
+    public async Task<string?> SalvarImagemAsync(
+        int id, 
+        IFormFile imagem, 
+        string webRootPath) 
     {
         if (imagem == null || imagem.Length == 0)
             return null;
 
-        if (string.IsNullOrEmpty(webRootPath))
-        {
-            webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-        }
+        var ordem = await _repository.GetByIdAsync(id);
 
-        var ordem = _repository.GetById(id);
         if (ordem == null)
             return null;
 
-        var uploadsFolder = Path.Combine(webRootPath, "uploads");
-        if (!Directory.Exists(uploadsFolder))
-            Directory.CreateDirectory(uploadsFolder);
+        if (string.IsNullOrEmpty(webRootPath))
+        {
+            webRootPath = Path.Combine(
+                Directory.GetCurrentDirectory(), 
+                "wwwroot");
+        }
 
-        var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(imagem.FileName)}";
+        var uploadsFolder = Path.Combine(
+            webRootPath, 
+            "uploads");
+
+        Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = 
+            $"{Guid.NewGuid()}{Path.GetExtension(imagem.FileName)}";
+
         var filePath = Path.Combine(uploadsFolder, fileName);
 
         using (var steam = new FileStream(filePath, FileMode.Create))
@@ -96,7 +112,9 @@ public class OrdemService : IOrdemService
         }
 
         ordem.ImagemUrl = $"/uploads/{fileName}";
-        _repository.AtualizarOrdemAsync(ordem);
+
+        await _repository.AtualizarOrdemAsync(ordem);
+
         return ordem.ImagemUrl;
     }
 }

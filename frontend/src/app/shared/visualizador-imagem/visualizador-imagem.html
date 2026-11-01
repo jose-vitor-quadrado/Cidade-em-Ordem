@@ -1,0 +1,23 @@
+<div
+  class="imagem-ampliada-overlay"
+  [class.active]="servico.imagem()"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Imagem da ocorrência ampliada"
+  [attr.aria-hidden]="!servico.imagem()"
+  (click)="servico.fechar()"
+>
+  <button
+    #botaoFechar
+    type="button"
+    class="imagem-ampliada-fechar"
+    aria-label="Fechar imagem"
+    (click)="servico.fechar()"
+  >
+    &times;
+  </button>
+  @if (servico.imagem(); as img) {
+    <img [src]="img.src" [alt]="img.legenda" (click)="$event.stopPropagation()" />
+    <p class="imagem-ampliada-legenda">{{ img.legenda }}</p>
+  }
+</div>
